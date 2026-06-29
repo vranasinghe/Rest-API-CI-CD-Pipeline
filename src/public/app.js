@@ -80,8 +80,13 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       const card = document.createElement('div');
-      card.className = 'task-card';
+      card.className = `task-card ${task.completed ? 'completed' : ''}`;
       card.innerHTML = `
+        <button class="btn-toggle-status" data-id="${task.id}" title="${task.completed ? 'Mark incomplete' : 'Mark complete'}">
+          <div class="custom-checkbox ${task.completed ? 'checked' : ''}">
+            ${task.completed ? '✓' : ''}
+          </div>
+        </button>
         <div class="task-content">
           <h3 class="task-title-line">${escapeHTML(task.title)}</h3>
           ${task.description ? `<p class="task-description">${escapeHTML(task.description)}</p>` : ''}
@@ -94,6 +99,11 @@ document.addEventListener('DOMContentLoaded', () => {
         </button>
       `;
 
+      // Set up toggle event
+      card.querySelector('.btn-toggle-status').addEventListener('click', async () => {
+        await toggleTask(task.id);
+      });
+
       // Set up delete event
       card.querySelector('.btn-delete').addEventListener('click', async () => {
         await deleteTask(task.id);
@@ -101,6 +111,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
       tasksContainer.appendChild(card);
     });
+  }
+
+  // Toggle task helper
+  async function toggleTask(id) {
+    try {
+      const response = await fetch(`/tasks/${id}/toggle`, {
+        method: 'PATCH'
+      });
+
+      if (!response.ok) throw new Error('Failed to toggle task status');
+      
+      showToast('Task updated.', 'success');
+      fetchTasks(); // Refresh list
+    } catch (err) {
+      showToast(err.message, 'error');
+    }
   }
 
   // Delete task helper

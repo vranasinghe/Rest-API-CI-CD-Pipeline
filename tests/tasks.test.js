@@ -119,6 +119,49 @@ describe('Tasks API Endpoints', () => {
     expect(response.body).toHaveProperty('error');
     expect(response.body.error).toContain('Invalid task ID');
   });
+
+  // Test 8: PATCH /tasks/:id/toggle successfully toggles task completion
+  test('PATCH /tasks/:id/toggle should toggle task completed status', async () => {
+    // Create a task
+    const createResponse = await request(app)
+      .post('/tasks')
+      .send({ title: 'Task to Toggle' });
+
+    const taskId = createResponse.body.id;
+    expect(createResponse.body.completed).toBe(false);
+
+    // Toggle to true
+    let toggleResponse = await request(app)
+      .patch(`/tasks/${taskId}/toggle`)
+      .expect(200);
+
+    expect(toggleResponse.body.completed).toBe(true);
+
+    // Toggle back to false
+    toggleResponse = await request(app)
+      .patch(`/tasks/${taskId}/toggle`)
+      .expect(200);
+
+    expect(toggleResponse.body.completed).toBe(false);
+  });
+
+  // Test 9: PATCH /tasks/:id/toggle returns 404 for nonexistent task
+  test('PATCH /tasks/:id/toggle should return 404 if the task ID does not exist', async () => {
+    const response = await request(app)
+      .patch('/tasks/999/toggle')
+      .expect(404);
+
+    expect(response.body.error).toContain('not found');
+  });
+
+  // Test 10: PATCH /tasks/:id/toggle returns 400 for invalid ID format
+  test('PATCH /tasks/:id/toggle should return 400 if task ID format is invalid', async () => {
+    const response = await request(app)
+      .patch('/tasks/abc/toggle')
+      .expect(400);
+
+    expect(response.body.error).toContain('Invalid task ID');
+  });
 });
 describe('Fallback /api endpoint handler', () => {
   test('GET /api/nonexistent should return 404 endpoint not found', async () => {

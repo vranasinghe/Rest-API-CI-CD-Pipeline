@@ -282,6 +282,64 @@ input[type="text"]:focus, textarea:focus {
   box-shadow: 0 0 10px rgba(244, 63, 94, 0.4);
 }
 
+/* Checkbox Toggle Button */
+.btn-toggle-status {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.2rem;
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+}
+
+.custom-checkbox {
+  width: 22px;
+  height: 22px;
+  border: 2px solid var(--text-muted);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: bold;
+  transition: var(--transition-smooth);
+}
+
+.custom-checkbox:hover {
+  border-color: var(--color-primary);
+}
+
+.custom-checkbox.checked {
+  background: var(--gradient-brand);
+  border-color: transparent;
+  box-shadow: 0 0 8px rgba(168, 85, 247, 0.4);
+}
+
+/* Completed Task State */
+.task-card.completed {
+  opacity: 0.55;
+  background: rgba(16, 185, 129, 0.02);
+  border-color: rgba(16, 185, 129, 0.15);
+}
+
+.task-card.completed:hover {
+  opacity: 0.85;
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.task-card.completed .task-title-line {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+.task-card.completed .task-description {
+  color: var(--text-muted);
+}
+
 /* States */
 .loading-state, .empty-state {
   text-align: center;
