@@ -1,0 +1,5 @@
+node_modules/
+coverage/
+.eslintcache
+powershell.cmd
+.DS_Store
